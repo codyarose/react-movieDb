@@ -1,29 +1,11 @@
 import React, { useState } from 'react'
 import Async from 'react-async'
 import { API } from '../utils/api'
-import { useInput } from './input-hook'
+import { Search } from './Search'
 import { SimpleModal } from './Modal'
 
 export const Results = () => {
 	const [query, setQuery] = useState('')
-	// const [modalVis, setModalVis] = useState(false)
-
-	const Search = () => {
-		const { value, bind, reset } = useInput('')
-
-		const handleSubmit = event => {
-			event.preventDefault()
-			setQuery(value)
-			reset()
-		}
-
-		return(
-			<form onSubmit={handleSubmit}>
-				<input type="search" {...bind} placeholder="Search" />
-				<input type="submit" value="Submit"/>
-			</form>
-		)
-	}
 
 	const loadMovies = () =>
 	fetch(`https://api.themoviedb.org/3/search/movie?api_key=${ API }&language=en-US&query=${ query }&page=1&include_adult=false`)
@@ -32,7 +14,7 @@ export const Results = () => {
 
 	return(
 		<div>
-			<Search />
+			<Search setValue={setQuery} />
 			{query &&
 				<Async promiseFn={loadMovies}>
 					<Async.Loading>Loading...</Async.Loading>
