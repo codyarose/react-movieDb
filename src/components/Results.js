@@ -1,48 +1,50 @@
-import React, { useState } from 'react'
-// import Async from 'react-async'
-// import { API } from '../utils/api'
-import { Search } from './Search'
-import { ResultsNew } from './Results-new'
-// import { SimpleModal } from './Modal'
+import React from 'react'
+import Async from 'react-async'
+import styled from 'styled-components'
+import { getMovies } from '../utils/getContent'
+import { Card } from './Card'
+import { SimpleModal } from './Modal'
 
-export const Results = () => {
-	const [query, setQuery] = useState('')
+export const Results = ({ queryString }) => {
 
-	// const loadMovies = () =>
-	// fetch(`https://api.themoviedb.org/3/search/movie?api_key=${ API }&language=en-US&query=${ query }&page=1&include_adult=false`)
-	// 	.then(res => (res.ok ? res : Promise.reject(res)))
-	// 	.then(res => res.json())
+	const loadMovies = () => {
+		return getMovies(queryString)
+	}
 
-	return(
-		<div>
-			<Search setValue={setQuery} />
-			{query &&
-				<ResultsNew query={query} />
-				// <Async promiseFn={loadMovies}>
-				// 	<Async.Loading>Loading...</Async.Loading>
-				// 	<Async.Fulfilled>
-				// 		{data => {
-				// 			return (
-				// 				data.results.map(result => (
-				// 					<div key={result.id}>
-				// 						{result.poster_path &&
-				// 							<img src={`https://image.tmdb.org/t/p/w200${result.poster_path}`} alt=""/>
-				// 						}
-				// 						<h2>{result.title}</h2>
-				// 						<SimpleModal>
-				// 							<h3>{result.title}</h3>
-				// 							<p>{result.overview}</p>
-				// 						</SimpleModal>
-				// 					</div>
-				// 				))
-				// 			)
-				// 		}}
-				// 	</Async.Fulfilled>
-				// 	<Async.Rejected>
-				// 		{error => `Something went wrong: ${error.message}`}
-				// 	</Async.Rejected>
-				// </Async>
-			}
-		</div>
+	return (
+		<StyledResults>
+			<Async promiseFn={loadMovies}>
+				<Async.Loading>Loading...</Async.Loading>
+				<Async.Fulfilled>
+					{data => {
+						return (
+							data.results.map(result => (
+								<Card
+									key={result.id}
+									poster={result.poster_path}
+									title={result.title}
+								>
+									<SimpleModal>
+										<h3>{result.title}</h3>
+										<p>{result.overview}</p>
+									</SimpleModal>
+								</Card>
+							))
+						)
+					}}
+				</Async.Fulfilled>
+				<Async.Rejected>
+					{error => `Something went wrong: ${error.message}`}
+				</Async.Rejected>
+			</Async>
+		</StyledResults>
 	)
 }
+
+const StyledResults = styled.div`
+	max-width: 1365px;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+	grid-gap: 2rem 1rem;
+	padding: 2rem;
+`
