@@ -1,8 +1,9 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { MdBrokenImage } from 'react-icons/md'
 
-export const Card = ({ poster, title, children }) => {
+export const Card = ({ poster, title, overview, children }) => {
 	return(
 		<StyledCard>
 			<StyledPoster>
@@ -17,14 +18,22 @@ export const Card = ({ poster, title, children }) => {
 					{ children }
 				</div>
 			</StyledDetails>
+			<StyledHover>
+				<div>
+					<p>{overview}</p>
+				</div>
+			</StyledHover>
 		</StyledCard>
 	)
 }
 
 const StyledCard = styled.div`
+	position: relative;
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
+	overflow: hidden;
+	border-radius: 10px;
 `
 
 const StyledPoster = styled.div`
@@ -32,8 +41,6 @@ const StyledPoster = styled.div`
 	width: 100%;
 	height: 0;
 	padding-top: 150%;
-	border-top-right-radius: 10px;
-	border-top-left-radius: 10px;
 	overflow: hidden;
 	& > img {
 		position: absolute;
@@ -53,11 +60,35 @@ const StyledPoster = styled.div`
 
 const StyledDetails = styled.div`
 	width: 100%;
+	height: 100%;
 	background-color: #000;
 	color: #fff;
-	border-bottom-left-radius: 10px;
-	border-bottom-right-radius: 10px;
 	.details__content {
 		padding: .5rem;
 	}
 `
+
+const StyledHover = styled.div`
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	background-color: rgba(0,0,0,.75);
+	color: #fff;
+	opacity: 0;
+	transition: opacity .2s ease-out;
+	&:hover {
+		opacity: 1;
+	}
+	& > div {
+		padding: 1rem;
+	}
+`
+
+Card.propTypes = {
+	poster: PropTypes.string,
+	title: PropTypes.string.isRequired,
+	overview: PropTypes.string.isRequired,
+	children: PropTypes.node,
+}

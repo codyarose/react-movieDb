@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { useInput } from './input-hook'
 import styled from 'styled-components'
 import Input from '@material-ui/core/Input'
@@ -18,7 +19,7 @@ export const Search = ({ setValue }) => {
 			<Input
 				{...bind}
 				placeholder="Search"
-				autofocus={true}
+				autoFocus={true}
 				endAdornment={
 					<InputAdornment position="end">
 						<MdSearch size={20} />
@@ -39,3 +40,6 @@ const SearchForm = styled.form`
 		max-width: 400px;
 	}
 `
+Search.propTypes = {
+	setValue: PropTypes.func.isRequired,
+}

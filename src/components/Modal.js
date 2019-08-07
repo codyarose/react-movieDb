@@ -1,4 +1,5 @@
 import React, { Fragment, useState } from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Modal from '@material-ui/core/Modal'
 
@@ -38,3 +39,7 @@ const ModalContent = styled.div`
 	padding: 1.5rem;
 	outline: none;
 `
+
+SimpleModal.propTypes = {
+	children: PropTypes.node,
+}

@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Async from 'react-async'
 import styled from 'styled-components'
 import { getMovies } from '../utils/getContent'
@@ -23,6 +24,7 @@ export const Results = ({ queryString }) => {
 									key={result.id}
 									poster={result.poster_path}
 									title={result.title}
+									overview={result.overview}
 								>
 									<SimpleModal>
 										<h3>{result.title}</h3>
@@ -48,3 +50,7 @@ const StyledResults = styled.div`
 	grid-gap: 2rem 1rem;
 	padding: 2rem;
 `
+
+Results.propTypes = {
+	queryString: PropTypes.string.isRequired,
+}

@@ -24,6 +24,7 @@ export default App;
 const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
+    font-family: Roboto, Arial, sans-serif;
   }
 `
 
