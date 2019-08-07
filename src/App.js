@@ -3,7 +3,7 @@ import styled, { createGlobalStyle } from 'styled-components'
 import { Search } from './components/Search'
 import { Results } from './components/Results'
 
-function App() {
+export const App = () => {
   const [query, setQuery] = useState('')
 
   return (
