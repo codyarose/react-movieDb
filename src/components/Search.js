@@ -6,12 +6,13 @@ import Input from '@material-ui/core/Input'
 import InputAdornment from '@material-ui/core/InputAdornment'
 import { MdSearch } from 'react-icons/md'
 
-export const Search = ({ setValue }) => {
+export const Search = ({ setValue, callback }) => {
 	const { value, bind } = useInput('')
 
 	const handleSubmit = e => {
 		e.preventDefault()
 		setValue(value)
+		callback(1)
 	}
 
 	return(

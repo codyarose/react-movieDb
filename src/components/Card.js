@@ -1,54 +1,83 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import Card from '@material-ui/core/Card'
+import CardContent from '@material-ui/core/CardContent'
+import CardMedia from '@material-ui/core/CardMedia'
+import Typography from '@material-ui/core/Typography'
+import Modal from '@material-ui/core/Modal'
 import { MdBrokenImage } from 'react-icons/md'
+import { Fade } from '../utils/Fade'
 
-export const Card = ({ poster, title, overview, children }) => {
+export const MediaCard = ({ poster, title, overview, children }) => {
+	const [show, setShow] = useState(false)
+	const [openModal, setOpenModal] = useState(false)
+
+	useEffect(() => {
+		setShow(true)
+	}, [])
+
+	const handleOpen = () => {
+		setOpenModal(true)
+	}
+	const handleClose = () => {
+		setOpenModal(false)
+	}
+
 	return(
-		<StyledCard>
-			<StyledPoster>
-				{poster
-					? <img src={`https://image.tmdb.org/t/p/w200${poster}`} alt={title}/>
-					: <MdBrokenImage size="64" color="gray" />
-				}
-			</StyledPoster>
-			<StyledDetails>
-				<div className="details__content">
-					<h2>{title}</h2>
-					{ children }
-				</div>
-			</StyledDetails>
-			<StyledHover>
-				<div>
-					<p>{overview}</p>
-				</div>
-			</StyledHover>
-		</StyledCard>
+		<Fade show={show}>
+			<Card onClick={handleOpen}>
+				<StyledPoster>
+					{poster
+						? <StyledCardMedia
+							image={`https://image.tmdb.org/t/p/w200${poster}`}
+							title={title}
+						/>
+						: <MdBrokenImage size={64} color="gray" />
+					}
+				</StyledPoster>
+
+				<StyledCardContent>
+					<Typography variant="h5" component="h2">
+						{title}
+					</Typography>
+					<Modal
+						open={openModal}
+						onClose={handleClose}
+					>
+						<ModalContent>
+							<h3>{title}</h3>
+							<p>{overview}</p>
+						</ModalContent>
+					</Modal>
+				</StyledCardContent>
+			</Card>
+		</Fade>
 	)
 }
 
-const StyledCard = styled.div`
-	position: relative;
-	display: flex;
-	flex-direction: column;
-	align-items: flex-start;
-	overflow: hidden;
-	border-radius: 10px;
+const StyledCardContent = styled(CardContent)`
+	background-color: #000;
+	color: #fff;
+	height: 100%;
 `
 
+const StyledCardMedia = styled(CardMedia)`
+	height: 0;
+	padding-top: 150%;
+`
 const StyledPoster = styled.div`
 	position: relative;
 	width: 100%;
 	height: 0;
 	padding-top: 150%;
 	overflow: hidden;
-	& > img {
+	& > div {
 		position: absolute;
 		width: 100%;
-		height: 100%;
-		top: 0;
-		left: 0;
-		object-fit: cover;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
 	}
 	& > svg {
 		position: absolute;
@@ -58,37 +87,21 @@ const StyledPoster = styled.div`
 	}
 `
 
-const StyledDetails = styled.div`
-	width: 100%;
-	height: 100%;
-	background-color: #000;
-	color: #fff;
-	.details__content {
-		padding: .5rem;
-	}
-`
-
-const StyledHover = styled.div`
+const ModalContent = styled.div`
 	position: absolute;
-	width: 100%;
-	height: 100%;
-	top: 0;
-	left: 0;
-	background-color: rgba(0,0,0,.75);
-	color: #fff;
-	opacity: 0;
-	transition: opacity .2s ease-out;
-	&:hover {
-		opacity: 1;
-	}
-	& > div {
-		padding: 1rem;
-	}
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 400px;
+	background-color: #fff;
+	border: 2px solid blue;
+	padding: 1.5rem;
+	outline: none;
 `
 
 Card.propTypes = {
 	poster: PropTypes.string,
-	title: PropTypes.string.isRequired,
-	overview: PropTypes.string.isRequired,
+	title: PropTypes.string,
+	overview: PropTypes.string,
 	children: PropTypes.node,
 }

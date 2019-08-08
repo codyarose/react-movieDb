@@ -15,10 +15,9 @@ export const SimpleModal = ({ children }) => {
 
 	return(
 		<Fragment>
-			<button onClick={handleOpen}>open</button>
 			<Modal
 				open={open}
-				onClose={handleClose}
+				onClose={open = false}
 			>
 				<ModalContent>
 					{children}
