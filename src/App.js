@@ -38,6 +38,9 @@ export const App = () => {
 	return (
 		<Fragment>
 			<GlobalStyle />
+			<StyledHeader>
+				<h1>ReactMovieDB</h1>
+			</StyledHeader>
 			<Container>
 				<Search setValue={setQuery} setCategory={setCategory} callback={resetSearch} />
 				{query &&
@@ -63,23 +66,37 @@ export const App = () => {
 export default App;
 
 const GlobalStyle = createGlobalStyle`
-  body {
-    margin: 0;
-    font-family: Roboto, Arial, sans-serif;
-  }
+	body {
+		margin: 0;
+		font-family: Roboto, Arial, sans-serif;
+		overflow: hidden;
+	}
 
-  @keyframes fadeIn {
-    0% { opacity: 0; }
-    100% { opacity: 1; }
-  }
-  @keyframes fadeOut {
-    0% { opacity: 1; }
-    100% { opacity: 0; }
-  }
+	@keyframes fadeIn {
+		0% { opacity: 0; }
+		100% { opacity: 1; }
+	}
+	@keyframes fadeOut {
+		0% { opacity: 1; }
+		100% { opacity: 0; }
+	}
+`
+
+const StyledHeader = styled.header`
+	text-align: center;
+	font-weight: 900;
+	margin: 0;
+	text-transform: uppercase;
+	margin-top: -3vw;
+	& > h1 {
+		font-size: 13vw;
+		margin: 0;
+	}
 `
 
 const Container = styled.main`
-  width: 100%;
-  max-width: 1365px;
-  margin: 0 auto;
+	width: 100%;
+	max-width: 1365px;
+	margin: 0 auto;
+	z-index: 1;
 `
