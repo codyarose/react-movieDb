@@ -9,7 +9,7 @@ import Modal from '@material-ui/core/Modal'
 import { MdBrokenImage } from 'react-icons/md'
 import { Fade } from '../utils/Fade'
 
-export const MediaCard = ({ poster, title, overview, children }) => {
+export const MediaCard = ({ poster, title, overview }) => {
 	const [show, setShow] = useState(false)
 	const [openModal, setOpenModal] = useState(false)
 
@@ -52,7 +52,6 @@ export const MediaCard = ({ poster, title, overview, children }) => {
 						</Modal>
 					</div>
 				</StyledCardContent>
-				{children}
 			</StyledCard>
 		</Fade>
 	)
