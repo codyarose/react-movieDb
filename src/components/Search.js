@@ -44,15 +44,17 @@ export const Search = ({ setValue, setCategory, callback }) => {
 
 const SearchForm = styled.form`
 	display: flex;
+	flex-wrap: wrap;
 	justify-content: center;
 	color: #fff;
 	padding: 1rem;
 	& > div {
 		width: 100%;
 		max-width: 300px;
-		margin: 0 1rem;
+		margin: 0 1rem 1rem;
 	}
 `
+
 Search.propTypes = {
 	setValue: PropTypes.func.isRequired,
 }

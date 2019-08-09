@@ -41,9 +41,7 @@ export const Results = ({ results, category }) => {
 							poster={category === 'person' ? item.profile_path : item.poster_path}
 							title={category === 'movie' ? item.title : item.name}
 							overview={item.overview}
-						>
-						{item.popularity}
-						</MediaCard>
+						/>
 					)
 					: 'Loading...'
 				}
@@ -55,6 +53,7 @@ export const Results = ({ results, category }) => {
 const StyledSorting = styled.div`
 	width: 100%;
 	display: flex;
+	justify-content: center;
 `
 
 const StyledResults = styled.div`
