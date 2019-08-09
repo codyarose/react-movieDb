@@ -26,7 +26,7 @@ export const MediaCard = ({ poster, title, overview, children }) => {
 
 	return(
 		<Fade show={show}>
-			<Card onClick={handleOpen}>
+			<StyledCard onClick={handleOpen}>
 				<StyledPoster>
 					{poster
 						? <StyledCardMedia
@@ -36,30 +36,51 @@ export const MediaCard = ({ poster, title, overview, children }) => {
 						: <MdBrokenImage size={64} color="gray" />
 					}
 				</StyledPoster>
-
 				<StyledCardContent>
-					<Typography variant="h5" component="h2">
-						{title}
-					</Typography>
-					<Modal
-						open={openModal}
-						onClose={handleClose}
-					>
-						<ModalContent>
-							<h3>{title}</h3>
-							<p>{overview}</p>
-						</ModalContent>
-					</Modal>
+					<div className="card-content-inner">
+						<Typography variant="h6" component="h2">
+							{title}
+						</Typography>
+						<Modal
+							open={openModal}
+							onClose={handleClose}
+						>
+							<ModalContent>
+								<h3>{title}</h3>
+								<p>{overview}</p>
+							</ModalContent>
+						</Modal>
+					</div>
 				</StyledCardContent>
-			</Card>
+				{children}
+			</StyledCard>
 		</Fade>
 	)
 }
 
+const StyledCard = styled(Card)`
+	position: relative;
+	cursor: pointer;
+	.MuiCardContent-root {
+		padding: 0;
+		&:last-child {
+			padding: 0;
+		}
+	}
+`
+
 const StyledCardContent = styled(CardContent)`
-	background-color: #000;
+	position: absolute;
+	width: 100%;
+	height: auto;
+	bottom: 0;
+	left: 0;
+	background: linear-gradient(to bottom, rgba(0,0,0,0), rgb(0,0,0));
 	color: #fff;
-	height: 100%;
+	padding: 0;
+	.card-content-inner {
+		padding: .5rem 1rem;
+	}
 `
 
 const StyledCardMedia = styled(CardMedia)`
@@ -94,7 +115,7 @@ const ModalContent = styled.div`
 	transform: translate(-50%, -50%);
 	width: 400px;
 	background-color: #fff;
-	border: 2px solid blue;
+	border: 2px solid #000;
 	padding: 1.5rem;
 	outline: none;
 `

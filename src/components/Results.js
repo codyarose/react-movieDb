@@ -1,44 +1,61 @@
-import React, { useState, useEffect } from 'react'
+import React, { Fragment, useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import Button from '@material-ui/core/Button'
+import ButtonGroup from '@material-ui/core/ButtonGroup'
 import { MediaCard } from './Card'
-import { API } from '../utils/api'
 
-export const Results = ({ queryString, setPage, callback }) => {
-	const [items, setItems] = useState({})
+export const Results = ({ results, category }) => {
+	const [items, setItems] = useState()
+	const [sorting, setSorting] = useState('relevance')
 
-	const getMovies = () => {
-		fetch(`https://api.themoviedb.org/3/search/movie?api_key=${ API }&language=en-US&query=${ queryString }&page=${ setPage }&include_adult=false`)
-			.then(res => res.json())
-			.then(data => setItems(data))
+	useEffect(() => {
+		setItems(results)
+	}, [results])
+
+	const sortByPopularity = () => {
+		let sortedItems = [].concat(items)
+		sortedItems.sort((a, b) => a.popularity - b.popularity).reverse()
+		setItems(sortedItems)
+		setSorting('popularity')
 	}
 
-	useEffect(() => {
-		getMovies()
-		// eslint-disable-next-line
-	}, [queryString, setPage])
-
-	useEffect(() => {
-		items && callback(items.total_pages)
-	})
+	const sortByRelevance = () => {
+		setItems(results)
+		setSorting('relevance')
+	}
 
 	return (
-		<StyledResults>
-			{items.results
-				? items.results.map(result =>
-					<MediaCard
-						key={result.id}
-						poster={result.poster_path}
-						title={result.title}
-						overview={result.overview}
-					>
-					</MediaCard>
-				)
-				: 'Loading...'
-			}
-		</StyledResults>
+		<Fragment>
+			<StyledSorting>
+				<ButtonGroup size="small">
+					<Button disabled={sorting === 'popularity'} onClick={sortByPopularity}>Popularity</Button>
+					<Button disabled={sorting === 'relevance'} onClick={sortByRelevance}>Relevance</Button>
+				</ButtonGroup>
+			</StyledSorting>
+			<StyledResults>
+				{items
+					? items.map(item =>
+						<MediaCard
+							key={item.id}
+							poster={category === 'person' ? item.profile_path : item.poster_path}
+							title={category === 'movie' ? item.title : item.name}
+							overview={item.overview}
+						>
+						{item.popularity}
+						</MediaCard>
+					)
+					: 'Loading...'
+				}
+			</StyledResults>
+		</Fragment>
 	)
 }
+
+const StyledSorting = styled.div`
+	width: 100%;
+	display: flex;
+`
 
 const StyledResults = styled.div`
 	max-width: 1365px;
@@ -49,5 +66,6 @@ const StyledResults = styled.div`
 `
 
 Results.propTypes = {
-	queryString: PropTypes.string.isRequired,
+	results: PropTypes.array,
+	category: PropTypes.string.isRequired,
 }

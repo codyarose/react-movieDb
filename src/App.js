@@ -1,20 +1,25 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import styled, { createGlobalStyle } from 'styled-components'
 import { Search } from './components/Search'
 import { Results } from './components/Results'
 import { Pagination } from './components/Pagination'
+import { API } from './utils/api'
 
 export const App = () => {
-	const [query, setQuery] = useState('')
+	const [query, setQuery] = useState('yes')
+	const [category, setCategory] = useState('movie')
 	const [page, setPage] = useState(1)
 	const [totalPages, setTotalPages] = useState()
+	const [results, setResults] = useState({})
+
+	const getMovies = () => {
+		fetch(`https://api.themoviedb.org/3/search/${ category }?api_key=${ API }&language=en-US&query=${ query }&page=${ page }&include_adult=false`)
+			.then(res => res.json())
+			.then(data => setResults(data))
+	}
 
 	const resetSearch = data => {
 		setPage(data)
-	}
-
-	const getPages = data => {
-		setTotalPages(data)
 	}
 
 	const handleNextPage = () => {
@@ -24,14 +29,24 @@ export const App = () => {
 		setPage(page - 1)
 	}
 
+	useEffect(() => {
+		getMovies()
+		results && setTotalPages(results.total_pages)
+		// eslint-disable-next-line
+	}, [query, category])
+
 	return (
 		<Fragment>
 			<GlobalStyle />
 			<Container>
-				<Search setValue={setQuery} callback={resetSearch} />
+				<Search setValue={setQuery} setCategory={setCategory} callback={resetSearch} />
 				{query &&
 					<Fragment>
-						<Results queryString={query} setPage={page} callback={getPages} />
+						<Results
+							results={results.results}
+							category={category}
+							setPage={page}
+						/>
 						<Pagination
 							next={handleNextPage}
 							prev={handlePrevPage}

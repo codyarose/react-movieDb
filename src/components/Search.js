@@ -4,21 +4,24 @@ import { useInput } from './input-hook'
 import styled from 'styled-components'
 import Input from '@material-ui/core/Input'
 import InputAdornment from '@material-ui/core/InputAdornment'
+import Select from '@material-ui/core/Select'
 import { MdSearch } from 'react-icons/md'
 
-export const Search = ({ setValue, callback }) => {
-	const { value, bind } = useInput('')
+export const Search = ({ setValue, setCategory, callback }) => {
+	const { value:query, bind:bindQuery } = useInput('')
+	const { value:category, bind:bindCategory } = useInput('movie')
 
 	const handleSubmit = e => {
 		e.preventDefault()
-		setValue(value)
+		setValue(query)
+		setCategory(category)
 		callback(1)
 	}
 
 	return(
 		<SearchForm onSubmit={handleSubmit}>
 			<Input
-				{...bind}
+				{...bindQuery}
 				placeholder="Search"
 				autoFocus={true}
 				endAdornment={
@@ -27,6 +30,14 @@ export const Search = ({ setValue, callback }) => {
 					</InputAdornment>
 				}
 			/>
+			<Select
+				native
+				{...bindCategory}
+			>
+				<option value="movie">Movies</option>
+				<option value="tv">TV Shows</option>
+				<option value="person">People</option>
+			</Select>
 		</SearchForm>
 	)
 }
@@ -38,7 +49,8 @@ const SearchForm = styled.form`
 	padding: 1rem;
 	& > div {
 		width: 100%;
-		max-width: 400px;
+		max-width: 300px;
+		margin: 0 1rem;
 	}
 `
 Search.propTypes = {
