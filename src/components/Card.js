@@ -30,7 +30,7 @@ export const MediaCard = ({ poster, title, overview }) => {
 				<StyledPoster>
 					{poster
 						? <StyledCardMedia
-							image={`https://image.tmdb.org/t/p/w200${poster}`}
+							image={`https://image.tmdb.org/t/p/w300${poster}`}
 							title={title}
 						/>
 						: <MdBrokenImage size={64} color="gray" />
