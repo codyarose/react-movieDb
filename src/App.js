@@ -4,7 +4,7 @@ import { Search } from './components/Search'
 import { Results } from './components/Results'
 import { Pagination } from './components/Pagination'
 import { API } from './utils/api'
-import { Movie } from './components/Movie'
+import { SingleResult } from './components/SingleResult'
 import IconButton from '@material-ui/core/IconButton'
 import { MdArrowBack } from 'react-icons/md'
 
@@ -47,7 +47,7 @@ export const App = () => {
 	}, [query, category, page])
 
 	useEffect(() => {
-		currentItem ? setView('movie') : setView('results')
+		currentItem ? setView('singleResult') : setView('results')
 	}, [currentItem])
 
 	return (
@@ -77,7 +77,7 @@ export const App = () => {
 						<IconButton color="primary" onClick={() => setView('results')}>
 							<MdArrowBack size={32} />
 						</IconButton>
-						<Movie currentItem={currentItem} />
+						<SingleResult currentItem={currentItem} category={category} />
 					</Fragment>
 				}
 			</Container>

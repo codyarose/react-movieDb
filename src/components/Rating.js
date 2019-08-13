@@ -14,7 +14,7 @@ export const Rating = ({ rating }) => {
 		for (let i = 0; i < fullStars; i++) {
 			starArray.push(1)
 		}
-		starArray.push(remainder)
+		remainder > 0 && starArray.push(remainder)
 		for (let i = 0; i < emptyStars; i++) {
 			starArray.push(0)
 		}
