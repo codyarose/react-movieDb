@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button'
 import ButtonGroup from '@material-ui/core/ButtonGroup'
 import { MediaCard } from './Card'
 
-export const Results = ({ results, category }) => {
+export const Results = ({ results, category, showItem }) => {
 	const [items, setItems] = useState()
 	const [sorting, setSorting] = useState('relevance')
 
@@ -37,13 +37,15 @@ export const Results = ({ results, category }) => {
 				{items
 					? items.map(item =>
 						<MediaCard
+							showItem={showItem}
 							key={item.id}
+							id={item.id}
 							poster={category === 'person' ? item.profile_path : item.poster_path}
 							title={category === 'movie' ? item.title : item.name}
 							overview={item.overview}
 						/>
 					)
-					: 'Loading...'
+					: <StyledLoading>Loading...</StyledLoading>
 				}
 			</StyledResults>
 		</Fragment>
@@ -62,6 +64,12 @@ const StyledResults = styled.div`
 	grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
 	grid-gap: 2rem 1rem;
 	padding: 2rem;
+`
+
+const StyledLoading = styled.div`
+	width: 100%;
+	font-size: 5rem;
+	text-align: center;
 `
 
 Results.propTypes = {

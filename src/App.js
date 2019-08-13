@@ -4,13 +4,18 @@ import { Search } from './components/Search'
 import { Results } from './components/Results'
 import { Pagination } from './components/Pagination'
 import { API } from './utils/api'
+import { Movie } from './components/Movie'
+import IconButton from '@material-ui/core/IconButton'
+import { MdArrowBack } from 'react-icons/md'
 
 export const App = () => {
-	const [query, setQuery] = useState('yes')
+	const [query, setQuery] = useState('test')
 	const [category, setCategory] = useState('movie')
 	const [page, setPage] = useState(1)
 	const [totalPages, setTotalPages] = useState()
 	const [results, setResults] = useState({})
+	const [view, setView] = useState()
+	const [currentItem, setCurrentItem] = useState()
 
 	const getMovies = () => {
 		fetch(`https://api.themoviedb.org/3/search/${ category }?api_key=${ API }&language=en-US&query=${ query }&page=${ page }&include_adult=false`)
@@ -20,6 +25,7 @@ export const App = () => {
 
 	const resetSearch = data => {
 		setPage(data)
+		setView('results')
 	}
 
 	const handleNextPage = () => {
@@ -29,11 +35,20 @@ export const App = () => {
 		setPage(page - 1)
 	}
 
+	const showItem = id => {
+		setCurrentItem(id)
+		setView('movie')
+	}
+
 	useEffect(() => {
 		getMovies()
 		results && setTotalPages(results.total_pages)
 		// eslint-disable-next-line
-	}, [query, category])
+	}, [query, category, page])
+
+	useEffect(() => {
+		currentItem ? setView('movie') : setView('results')
+	}, [currentItem])
 
 	return (
 		<Fragment>
@@ -43,12 +58,13 @@ export const App = () => {
 			</StyledHeader>
 			<Container>
 				<Search setValue={setQuery} setCategory={setCategory} callback={resetSearch} />
-				{query &&
-					<Fragment>
+				{view === 'results'
+					? <Fragment>
 						<Results
 							results={results.results}
 							category={category}
 							setPage={page}
+							showItem={showItem}
 						/>
 						<Pagination
 							next={handleNextPage}
@@ -57,7 +73,13 @@ export const App = () => {
 							disableNext={page === totalPages && true}
 						/>
 					</Fragment>
-        }
+					: <Fragment>
+						<IconButton color="primary" onClick={() => setView('results')}>
+							<MdArrowBack size={32} />
+						</IconButton>
+						<Movie currentItem={currentItem} />
+					</Fragment>
+				}
 			</Container>
 		</Fragment>
 	);
@@ -69,7 +91,6 @@ const GlobalStyle = createGlobalStyle`
 	body {
 		margin: 0;
 		font-family: Roboto, Arial, sans-serif;
-		overflow: hidden;
 	}
 
 	@keyframes fadeIn {
@@ -88,6 +109,7 @@ const StyledHeader = styled.header`
 	margin: 0;
 	text-transform: uppercase;
 	margin-top: -3vw;
+	color: rgba(0,0,0,0.25);
 	& > h1 {
 		font-size: 13vw;
 		margin: 0;

@@ -13,9 +13,11 @@ export const Search = ({ setValue, setCategory, callback }) => {
 
 	const handleSubmit = e => {
 		e.preventDefault()
-		setValue(query)
-		setCategory(category)
-		callback(1)
+		if (query !== '') {
+			setValue(query)
+			setCategory(category)
+			callback(1)
+		}
 	}
 
 	return(

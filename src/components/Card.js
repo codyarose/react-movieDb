@@ -5,28 +5,19 @@ import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent'
 import CardMedia from '@material-ui/core/CardMedia'
 import Typography from '@material-ui/core/Typography'
-import Modal from '@material-ui/core/Modal'
 import { MdBrokenImage } from 'react-icons/md'
 import { Fade } from '../utils/Fade'
 
-export const MediaCard = ({ poster, title, overview }) => {
+export const MediaCard = ({ poster, title, overview, id, showItem }) => {
 	const [show, setShow] = useState(false)
-	const [openModal, setOpenModal] = useState(false)
 
 	useEffect(() => {
 		setShow(true)
 	}, [])
 
-	const handleOpen = () => {
-		setOpenModal(true)
-	}
-	const handleClose = () => {
-		setOpenModal(false)
-	}
-
 	return(
 		<Fade show={show}>
-			<StyledCard onClick={handleOpen}>
+			<StyledCard onClick={() => showItem(id)}>
 				<StyledPoster>
 					{poster
 						? <StyledCardMedia
@@ -41,15 +32,6 @@ export const MediaCard = ({ poster, title, overview }) => {
 						<Typography variant="h6" component="h2">
 							{title}
 						</Typography>
-						<Modal
-							open={openModal}
-							onClose={handleClose}
-						>
-							<ModalContent>
-								<h3>{title}</h3>
-								<p>{overview}</p>
-							</ModalContent>
-						</Modal>
 					</div>
 				</StyledCardContent>
 			</StyledCard>
@@ -105,18 +87,6 @@ const StyledPoster = styled.div`
 		left: 50%;
 		transform: translate(-50%, -50%);
 	}
-`
-
-const ModalContent = styled.div`
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	width: 400px;
-	background-color: #fff;
-	border: 2px solid #000;
-	padding: 1.5rem;
-	outline: none;
 `
 
 Card.propTypes = {
