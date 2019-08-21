@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button'
 import ButtonGroup from '@material-ui/core/ButtonGroup'
 import { MediaCard } from './Card'
 
-export const Results = ({ results, category, showItem }) => {
+export const Results = ({ results, category, showItem, isLoading, error }) => {
 	const [items, setItems] = useState()
 	const [sorting, setSorting] = useState('relevance')
 
@@ -25,6 +25,10 @@ export const Results = ({ results, category, showItem }) => {
 		setSorting('relevance')
 	}
 
+	if (error) {
+		return <div>{error.message}</div>
+	}
+
 	return (
 		<Fragment>
 			<StyledSorting>
@@ -33,9 +37,10 @@ export const Results = ({ results, category, showItem }) => {
 					<Button disabled={sorting === 'relevance'} onClick={sortByRelevance}>Relevance</Button>
 				</ButtonGroup>
 			</StyledSorting>
-			<StyledResults>
-				{items
-					? items.map(item =>
+			{isLoading
+				? <StyledLoading>Loading...</StyledLoading>
+				: <StyledResults>
+					{items && items.map(item =>
 						<MediaCard
 							showItem={showItem}
 							key={item.id}
@@ -43,11 +48,10 @@ export const Results = ({ results, category, showItem }) => {
 							poster={category === 'person' ? item.profile_path : item.poster_path}
 							title={category === 'movie' ? item.title : item.name}
 							overview={item.overview}
-						/>
-					)
-					: <StyledLoading>Loading...</StyledLoading>
-				}
-			</StyledResults>
+						/>)
+					}
+				</StyledResults>
+			}
 		</Fragment>
 	)
 }

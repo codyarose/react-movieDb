@@ -1,55 +1,48 @@
-import React, { Fragment, useState, useEffect } from 'react'
-import { API } from '../utils/api'
+import React, { Fragment } from 'react'
 import styled from 'styled-components'
 import { FaImdb } from 'react-icons/fa'
 import { Rating } from './Rating'
+import { useAPI } from '../utils/getContent'
 
 export const SingleResult = ({ currentItem, category }) => {
-	const [resultData, setResultData] = useState()
-	const getSingleResult = id => {
-		fetch(`https://api.themoviedb.org/3/${ category }/${ currentItem }?api_key=${ API }&language=en-US`)
-			.then(res => res.json())
-			.then(data => setResultData(data))
+	const [results, error] = useAPI('loadMoviesById', category, currentItem)
+
+	if (error) {
+		return <div>{error.message}</div>
 	}
-
-	useEffect(() => {
-		currentItem && getSingleResult(currentItem)
-		// eslint-disable-next-line
-	}, [currentItem])
-
 	return (
 		<Fragment>
-			{resultData &&
+			{results &&
 				<StyledResult>
 					<StyledPoster>
 						<div>
-							<img src={`https://image.tmdb.org/t/p/w300${resultData.poster_path || resultData.profile_path}`} alt=""/>
+							<img src={`https://image.tmdb.org/t/p/w300${results.poster_path || results.profile_path}`} alt=""/>
 						</div>
 					</StyledPoster>
 					<div>
-						<StyledTitle>{resultData.title || resultData.name}</StyledTitle>
-						{resultData.vote_average > 0
-							? <Rating rating={resultData.vote_average} />
+						<StyledTitle>{results.title || results.name}</StyledTitle>
+						{results.vote_average > 0
+							? <Rating rating={results.vote_average} />
 							: 'No rating'
 						}
-						{resultData.genres &&
+						{results.genres &&
 							<div>
-								Genre: {resultData.genres.map((genre, i) => [
+								Genre: {results.genres.map((genre, i) => [
 									i > 0 && ", ",
 									`${genre.name}`
 								]
 								)}
 							</div>
 						}
-						{resultData.known_for_department &&
-							<div>Known for: {resultData.known_for_department}</div>
+						{results.known_for_department &&
+							<div>Known for: {results.known_for_department}</div>
 						}
-						{resultData.number_of_seasons && <div>{resultData.number_of_seasons} season{resultData.number_of_seasons > 1 && 's'}</div>}
-						{resultData.runtime && <div>Runtime: {resultData.runtime} mins</div>}
-						<StyledOverview>{resultData.overview || resultData.biography}</StyledOverview>
-						{resultData.imdb_id &&
+						{results.number_of_seasons && <div>{results.number_of_seasons} season{results.number_of_seasons > 1 && 's'}</div>}
+						{results.runtime && <div>Runtime: {results.runtime} mins</div>}
+						<StyledOverview>{results.overview || results.biography}</StyledOverview>
+						{results.imdb_id &&
 							<a
-								href={`https://www.imdb.com/title/${resultData.imdb_id}`}
+								href={`https://www.imdb.com/title/${results.imdb_id}`}
 								target="_blank"
 								rel="noopener noreferrer"
 							>
@@ -65,11 +58,18 @@ export const SingleResult = ({ currentItem, category }) => {
 
 const StyledResult = styled.div`
 	display: flex;
-	padding: 4rem 0;
+	padding: 4rem 1rem;
+	@media screen and (max-width: 48em) {
+		flex-wrap: wrap;
+	}
 `
 const StyledPoster = styled.div`
 	min-width: 300px;
 	margin-right: 2rem;
+	margin-bottom: 2rem;
+	@media screen and (max-width: 48em) {
+		margin: 0 auto 2rem;
+	}
 	& > div {
 		position: relative;
 		width: 100%;
@@ -89,6 +89,9 @@ const StyledPoster = styled.div`
 const StyledTitle = styled.h1`
 	font-size: 4rem;
 	margin: 0;
+	@media screen and (max-width: 48em) {
+		font-size: 3rem;
+	}
 `
 
 const StyledOverview = styled.p`

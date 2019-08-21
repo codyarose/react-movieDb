@@ -3,25 +3,19 @@ import styled, { createGlobalStyle } from 'styled-components'
 import { Search } from './components/Search'
 import { Results } from './components/Results'
 import { Pagination } from './components/Pagination'
-import { API } from './utils/api'
 import { SingleResult } from './components/SingleResult'
 import IconButton from '@material-ui/core/IconButton'
 import { MdArrowBack } from 'react-icons/md'
+import { useAPI } from './utils/getContent'
 
 export const App = () => {
 	const [query, setQuery] = useState('test')
 	const [category, setCategory] = useState('movie')
 	const [page, setPage] = useState(1)
 	const [totalPages, setTotalPages] = useState()
-	const [results, setResults] = useState({})
 	const [view, setView] = useState()
 	const [currentItem, setCurrentItem] = useState()
-
-	const getMovies = () => {
-		fetch(`https://api.themoviedb.org/3/search/${ category }?api_key=${ API }&language=en-US&query=${ query }&page=${ page }&include_adult=false`)
-			.then(res => res.json())
-			.then(data => setResults(data))
-	}
+	const [results, isLoading, error] = useAPI('loadMovies', query, page)
 
 	const resetSearch = data => {
 		setPage(data)
@@ -41,7 +35,6 @@ export const App = () => {
 	}
 
 	useEffect(() => {
-		getMovies()
 		results && setTotalPages(results.total_pages)
 		// eslint-disable-next-line
 	}, [query, category, page])
@@ -61,10 +54,12 @@ export const App = () => {
 				{view === 'results'
 					? <Fragment>
 						<Results
-							results={results.results}
+							results={results && results.results}
 							category={category}
 							setPage={page}
 							showItem={showItem}
+							isLoading={isLoading}
+							error={error}
 						/>
 						<Pagination
 							next={handleNextPage}
@@ -77,7 +72,7 @@ export const App = () => {
 						<IconButton color="primary" onClick={() => setView('results')}>
 							<MdArrowBack size={32} />
 						</IconButton>
-						<SingleResult currentItem={currentItem} category={category} />
+						<SingleResult currentItem={currentItem && currentItem} category={category} />
 					</Fragment>
 				}
 			</Container>
