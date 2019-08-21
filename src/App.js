@@ -51,8 +51,8 @@ export const App = () => {
 			</StyledHeader>
 			<Container>
 				<Search setValue={setQuery} setCategory={setCategory} callback={resetSearch} />
-				{view === 'results'
-					? <Fragment>
+				{view === 'results' &&
+					<Fragment>
 						<Results
 							results={results && results.results}
 							category={category}
@@ -68,7 +68,9 @@ export const App = () => {
 							disableNext={page === totalPages && true}
 						/>
 					</Fragment>
-					: <Fragment>
+				}
+				{view === 'singleResult' &&
+					<Fragment>
 						<IconButton color="primary" onClick={() => setView('results')}>
 							<MdArrowBack size={32} />
 						</IconButton>
