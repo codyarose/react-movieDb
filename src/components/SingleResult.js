@@ -59,6 +59,7 @@ export const SingleResult = ({ currentItem, category }) => {
 const StyledResult = styled.div`
 	display: flex;
 	padding: 4rem 1rem;
+	color: ${props => props.theme.color};
 	@media screen and (max-width: 48em) {
 		flex-wrap: wrap;
 	}

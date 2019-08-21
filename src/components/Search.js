@@ -32,14 +32,14 @@ export const Search = ({ setValue, setCategory, callback }) => {
 					</InputAdornment>
 				}
 			/>
-			<Select
+			<StyledSelect
 				native
 				{...bindCategory}
 			>
 				<option value="movie">Movies</option>
 				<option value="tv">TV Shows</option>
 				<option value="person">People</option>
-			</Select>
+			</StyledSelect>
 		</SearchForm>
 	)
 }
@@ -48,12 +48,28 @@ const SearchForm = styled.form`
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
-	color: #fff;
+	color: ${props => props.theme.color};
 	padding: 1rem;
 	& > div {
 		width: 100%;
 		max-width: 300px;
 		margin: 0 1rem 1rem;
+	}
+	.MuiInputBase-root {
+		color: ${props => props.theme.color};
+	}
+	.MuiInput-underline:before {
+		border-color: ${props => props.theme.underline};
+	}
+	.MuiInput-underline:after {
+		border-color: ${props => props.theme.underlineActive};
+	}
+`
+
+const StyledSelect = styled(Select)`
+	.MuiSelect-icon {
+		color: ${props => props.theme.color};
+		opacity: .54;
 	}
 `
 
