@@ -33,8 +33,8 @@ export const Results = ({ results, category, showItem, isLoading, error }) => {
 		<Fragment>
 			<StyledSorting>
 				<ButtonGroup size="small">
-					<Button disabled={sorting === 'popularity'} onClick={sortByPopularity}>Popularity</Button>
-					<Button disabled={sorting === 'relevance'} onClick={sortByRelevance}>Relevance</Button>
+					<StyledButton disabled={sorting === 'popularity'} onClick={sortByPopularity}>Popularity</StyledButton>
+					<StyledButton disabled={sorting === 'relevance'} onClick={sortByRelevance}>Relevance</StyledButton>
 				</ButtonGroup>
 			</StyledSorting>
 			{isLoading
@@ -62,6 +62,22 @@ const StyledSorting = styled.div`
 	justify-content: center;
 `
 
+const StyledButton = styled(Button)`
+	&.MuiButton-root {
+		color: ${props => props.theme.color};
+		&.Mui-disabled {
+			color: ${props => props.theme.color};
+			opacity: .3;
+		}
+	}
+	&.MuiButton-outlined {
+		border-color: ${props => props.theme.color};
+		&.Mui-disabled {
+			border-color: ${props => props.theme.color};
+		}
+	}
+`
+
 const StyledResults = styled.div`
 	max-width: 1365px;
 	display: grid;
@@ -74,6 +90,7 @@ const StyledLoading = styled.div`
 	width: 100%;
 	font-size: 5rem;
 	text-align: center;
+	color: ${props => props.theme.color}
 `
 
 Results.propTypes = {
